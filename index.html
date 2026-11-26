@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16191d">
+<title>Mes séances salle</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<style>
+:root{color-scheme:dark;--bg:#121417;--card:#1c1f24;--ink:#f1f2f3;--mute:#9aa3ad;--line:#2c3138;--acc:#ff6a2b;--soft:#2a1d16;--head:#16191d;--ok:#3ecf8e}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Roboto,sans-serif;overflow-x:clip;padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+h1,h2,h3{margin:0;line-height:1.1}
+.cond{font-family:"Roboto Condensed","Arial Narrow",system-ui,sans-serif;font-stretch:condensed}
+header{background:var(--head);padding:calc(14px + env(safe-area-inset-top)) 16px 12px;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}
+.seg{display:flex;gap:6px;margin-bottom:10px}
+.seg button{flex:1;min-height:44px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--mute);font-weight:600;font-size:15px}
+.seg button[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#fff}
+header h1{font-size:24px;font-weight:700}
+header p{margin:2px 0 8px;color:var(--mute);font-size:14px}
+.prog{height:6px;background:var(--line);border-radius:3px;overflow:hidden}.prog i{display:block;height:100%;background:var(--acc);width:0;transition:width .3s}
+.stat{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);margin-top:6px}
+main{max-width:720px;margin:0 auto;padding:12px}
+.note{background:var(--soft);border-radius:12px;padding:10px 14px;margin:8px 0;font-size:14px}
+.grp{margin:20px 0 8px;font-size:19px;font-weight:700;color:var(--acc)}
+.ex{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.ex.done{opacity:.5}
+.ex h3{font-size:17px;font-weight:600}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-top:6px}
+.big{font-size:26px;font-weight:700;line-height:1;white-space:nowrap}
+.cue{margin:6px 0 0;color:var(--mute);font-size:14px}
+.btn{min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);font:600 15px system-ui,sans-serif;white-space:nowrap}
+.btn.acc{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn:focus-visible,.dot:focus-visible,input:focus-visible,select:focus-visible,nav a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.sets{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.dot{width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:transparent;color:var(--mute);font-weight:600;font-size:15px}
+.dot[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#fff}
+.load{display:flex;align-items:center;gap:6px;margin-left:auto}
+.load input{width:90px;min-height:44px;font:600 17px system-ui,sans-serif;text-align:right;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.load span{color:var(--mute);font-size:14px}
+.prev{margin-top:6px;font-size:13px;color:var(--mute)}.prev b{color:var(--ink)}
+.timer{position:fixed;left:0;right:0;bottom:calc(60px + env(safe-area-inset-bottom));background:#23272d;display:flex;align-items:center;gap:10px;padding:8px 14px;transform:translateY(200%);transition:transform .25s;z-index:6;border-top:2px solid var(--acc)}
+.timer.on{transform:none}.timer .big{font-size:36px;min-width:3.2ch}.timer.end .big{color:var(--acc)}
+.timer .lbl{flex:1;font-size:13px;color:var(--mute);line-height:1.3}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--head);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:7}
+nav a{flex:1;text-align:center;padding:10px 4px;min-height:60px;color:var(--mute);text-decoration:none;font-size:13px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+nav a[aria-current=true]{color:var(--acc)}
+nav svg{width:22px;height:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.card h2{font-size:20px;margin-bottom:8px}
+.card p{margin:4px 0 10px;color:var(--mute);font-size:14px}
+select{width:100%;min-height:46px;font-size:16px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:0 10px}
+.fig{position:relative;height:260px;margin-top:12px}.fig svg{position:absolute;inset:0;width:100%;height:100%}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+th,td{text-align:left;padding:7px 4px;border-bottom:1px solid var(--line)}th{color:var(--mute);font-weight:600}
+td.n,th.n{text-align:right;white-space:nowrap}
+.stack{display:flex;flex-direction:column;gap:8px}
+.toast{position:fixed;left:16px;right:16px;top:calc(14px + env(safe-area-inset-top));background:var(--ok);color:#06130d;font-weight:600;padding:12px 14px;border-radius:12px;z-index:9;transform:translateY(-200%);transition:transform .3s}
+.toast.on{transform:none}
+.empty{color:var(--mute);text-align:center;padding:30px 10px}
+.warn{background:var(--soft);border:1px solid var(--acc);border-radius:12px;padding:10px 14px;margin:8px 0;font-size:14px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header id="hdr"></header>
+<main id="main"><p class="empty">Chargement du plan…</p></main>
+<div class="timer" id="timer" role="status" aria-live="polite">
+  <span class="big cond" id="tt">0:00</span><span class="lbl" id="tl">Repos</span>
+  <button class="btn" id="tAdd" type="button">+15 s</button><button class="btn acc" id="tStop" type="button">Stop</button>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<nav id="nav">
+  <a href="#seance" data-v="seance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Séance</a>
+  <a href="#progression" data-v="progression"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18M5 16l5-5 4 3 6-7"/></svg>Progression</a>
+  <a href="#sauvegarde" data-v="sauvegarde"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg>Sauvegarde</a>
+</nav>
+<script>
+{
+/* ---------- Stockage ---------- */
+const ls = {
+  get(k, d){ try{ const v = localStorage.getItem("ss:"+k); return v === null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem("ss:"+k, JSON.stringify(v)); }catch(e){} }
+};
+const esc = t => String(t ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad = n => String(n).padStart(2, "0");
+const today = () => { const d = new Date(); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); };
+const frDate = iso => { const [y,m,d] = iso.split("-"); return d+"/"+m; };
+const num = c => { const v = parseFloat(String(c).replace(",", ".")); return isNaN(v) ? null : v; };
+const fmt = s => Math.floor(s/60)+":"+pad(s%60);
+
+let log = ls.get("log", {});          // { "AAAA-MM-JJ|A": { date, s, ex:{ id:{ c:"8", d:[true,false] } } } }
+let plan = null;                      // résultat du parseur
+let view = "seance", cur = null;
+
+/* ---------- Parseur du seances.md ---------- */
+const DAYS = {dimanche:0,lundi:1,mardi:2,mercredi:3,jeudi:4,vendredi:5,samedi:6};
+function parseRest(r){
+  r = (r||"").trim(); if(!r || r === "-") return 0;
+  const m = r.match(/^(\d+)'(\d+)?/); if(m) return (+m[1])*60 + (+(m[2]||0));
+  const s = r.match(/^(\d+)/); return s ? +s[1] : 0;
+}
+function parse(md){
+  const sessions = []; let s = null, g = null;
+  for(const raw of md.split(/\r?\n/)){
+    const l = raw.trim();
+    let m;
+    if((m = l.match(/^#\s+(.+)/)) && !l.startsWith("##")){
+      const p = m[1].split("|").map(x => x.trim());
+      const key = (p[0].match(/S[ée]ance\s+(\S+)/i) || [,p[0]])[1];
+      s = {key, title:p[0], day:p[1]||"", sub:p[2]||"", dur:p[3]||"", notes:[], groups:[]};
+      sessions.push(s); g = null;
+    } else if(s && (m = l.match(/^>\s*(.+)/))){ s.notes.push(m[1]); }
+    else if(s && (m = l.match(/^##\s+(.+)/))){ g = {name:m[1], ex:[]}; s.groups.push(g); }
+    else if(s && (m = l.match(/^-\s*\[([^\]]+)\]\s*(.+)/))){
+      if(!g){ g = {name:"", ex:[]}; s.groups.push(g); }
+      const f = m[2].split("|").map(x => x.trim());
+      const sr = (f[1]||"").match(/^(\d+)\s*x\s*(.+)$/i);
+      const rest = parseRest(f[2]);
+      g.ex.push({id:m[1].trim(), name:f[0], sets: sr ? +sr[1] : 1, reps: sr ? sr[2] : (f[1]||""), rest, restTxt:f[2]||"", cue:f[3]||"", hint:f[4]||"", load: rest > 0});
+    }
+  }
+  return {sessions};
+}
+const allEx = s => s.groups.flatMap(g => g.ex);
+
+/* ---------- Chargement du plan (réseau, sinon copie locale) ---------- */
+async function loadPlan(){
+  const old = ls.get("md", null);
+  let md = old;
+  try{
+    const r = await fetch("seances.md", {cache:"no-store"});
+    if(r.ok){ md = await r.text(); ls.set("md", md); ls.set("mdDate", new Date().toISOString());
+      if(old && old !== md) toast("Plan mis à jour"); }
+  }catch(e){}
+  if(!md){ document.getElementById("main").innerHTML = '<p class="empty">Plan introuvable. Ouvre l\'app une première fois avec du réseau.</p>'; return; }
+  plan = parse(md);
+  cur = pickSession();
+  route();
+}
+function pickSession(){
+  const S = plan.sessions, t = today(), wd = new Date().getDay();
+  const started = S.find(s => log[t+"|"+s.key]);
+  if(started) return started.key;
+  const todayS = S.find(s => DAYS[s.day.toLowerCase()] === wd);
+  if(todayS) return todayS.key;
+  let best = S[0], bd = 9;
+  for(const s of S){ const d = DAYS[s.day.toLowerCase()]; if(d === undefined) continue; const diff = (d - wd + 7) % 7; if(diff < bd){ bd = diff; best = s; } }
+  return best ? best.key : null;
+}
+
+/* ---------- Données de séance ---------- */
+const dayKey = () => today()+"|"+cur;
+function entry(id, create){
+  const k = dayKey();
+  if(!log[k]){ if(!create) return null; log[k] = {date:today(), s:cur, ex:{}}; }
+  if(!log[k].ex[id]){ if(!create) return null; log[k].ex[id] = {c:"", d:[]}; }
+  return log[k].ex[id];
+}
+function previous(id){
+  const t = today();
+  const keys = Object.keys(log).filter(k => log[k].date < t && log[k].ex[id] && log[k].ex[id].c !== "").sort().reverse();
+  return keys.length ? {c: log[keys[0]].ex[id].c, date: log[keys[0]].date} : null;
+}
+const save = () => ls.set("log", log);
+
+/* ---------- Vue séance ---------- */
+function renderHeader(){
+  const h = document.getElementById("hdr");
+  if(view !== "seance" || !plan){ h.innerHTML = `<h1 class="cond">${view === "progression" ? "Progression" : "Sauvegarde"}</h1>`; return; }
+  const s = plan.sessions.find(x => x.key === cur);
+  const ex = allEx(s);
+  let tot = 0, done = 0, left = 0;
+  for(const e of ex){ const en = entry(e.id); const n = en ? en.d.filter(Boolean).length : 0; tot += e.sets; done += Math.min(n, e.sets); if(n < e.sets) left++; }
+  h.innerHTML = `<div class="seg">${plan.sessions.map(x => `<button type="button" data-s="${esc(x.key)}" aria-pressed="${x.key === cur}">${esc(x.title)}</button>`).join("")}</div>
+   <h1 class="cond">${esc(s.sub || s.title)}</h1><p>${esc(s.day)}${s.dur ? " · "+esc(s.dur) : ""}</p>
+   <div class="prog"><i style="width:${tot ? Math.round(done/tot*100) : 0}%"></i></div>
+   <div class="stat"><span>${done} / ${tot} séries</span><span>${left ? "Reste "+left+" exercice"+(left > 1 ? "s" : "") : "Séance terminée, bravo !"}</span></div>`;
+}
+function renderSeance(){
+  const s = plan.sessions.find(x => x.key === cur);
+  const last = ls.get("lastExport", null);
+  const days = last ? Math.floor((Date.now() - new Date(last)) / 864e5) : null;
+  const nag = Object.keys(log).length >= 4 && (days === null || days > 30)
+    ? `<div class="warn">Pense à sauvegarder tes données (onglet Sauvegarde)${days !== null ? " : dernière il y a "+days+" jours" : ""}.</div>` : "";
+  let n = 0;
+  return nag + s.notes.map(t => `<div class="note">${esc(t)}</div>`).join("") + s.groups.map(g =>
+    (g.name ? `<h2 class="grp cond">${esc(g.name)}</h2>` : "") + g.ex.map(e => {
+      n++;
+      const en = entry(e.id) || {c:"", d:[]};
+      const ok = en.d.filter(Boolean).length >= e.sets;
+      const p = e.load ? previous(e.id) : null;
+      return `<section class="ex${ok ? " done" : ""}" data-id="${esc(e.id)}">
+        <h3>${n}. ${esc(e.name)}</h3>
+        <div class="row"><span class="big cond">${e.sets > 1 ? e.sets+" x " : ""}${esc(e.reps)}</span>
+          ${e.rest ? `<button class="btn rest" type="button" data-r="${e.rest}">Repos ${esc(e.restTxt)}</button>` : ""}</div>
+        ${e.cue ? `<p class="cue">${esc(e.cue)}</p>` : ""}
+        <div class="sets">${Array.from({length:e.sets}, (_, j) => `<button class="dot" type="button" data-j="${j}" aria-pressed="${!!en.d[j]}" aria-label="Série ${j+1}">${e.sets > 1 ? j+1 : "OK"}</button>`).join("")}
+          ${e.load ? `<label class="load"><input inputmode="decimal" data-id="${esc(e.id)}" value="${esc(en.c)}" placeholder="${esc(p ? p.c : (e.hint || "kg"))}" aria-label="Charge ${esc(e.name)}"><span>kg</span></label>` : ""}</div>
+        ${e.load ? `<div class="prev">${p ? `Dernière fois (${frDate(p.date)}) : <b>${esc(p.c)} kg</b>` : (e.hint ? `Charge indicative : <b>${esc(e.hint)} kg</b>` : "Première fois : note ta charge")}</div>` : ""}
+      </section>`;
+    }).join("")).join("") +
+    `<div class="stack" style="margin-top:16px"><button class="btn" type="button" id="resetDay">Remettre la séance du jour à zéro</button></div>`;
+}
+
+/* ---------- Vue progression ---------- */
+function exList(){
+  const seen = new Map();
+  for(const s of plan.sessions) for(const e of allEx(s)) if(e.load && !seen.has(e.id)) seen.set(e.id, e.name);
+  for(const k in log) for(const id in log[k].ex) if(!seen.has(id) && log[k].ex[id].c !== "") seen.set(id, id);
+  return [...seen];
+}
+function series(id){
+  return Object.keys(log).sort().map(k => ({k, date:log[k].date, s:log[k].s, c:log[k].ex[id]?.c ?? "", d:log[k].ex[id]?.d || []}))
+    .filter(r => r.c !== "");
+}
+function renderProg(){
+  const list = exList();
+  const sel = ls.get("progEx", list[0]?.[0]);
+  const id = list.some(x => x[0] === sel) ? sel : list[0]?.[0];
+  const rows = id ? series(id) : [];
+  return `<div class="card"><label for="exSel" style="font-size:14px;color:var(--mute)">Exercice</label>
+    <select id="exSel">${list.map(([i, nm]) => `<option value="${esc(i)}"${i === id ? " selected" : ""}>${esc(nm)}</option>`).join("")}</select>
+    ${rows.length ? `<div class="fig" id="fig"><svg id="chart" role="img" aria-label="Évolution de la charge"></svg></div>` : `<p class="empty">Pas encore de charge notée pour cet exercice.</p>`}</div>
+    ${rows.length ? `<div class="card"><table><thead><tr><th>Date</th><th>Séance</th><th class="n">Charge</th><th class="n">Séries</th></tr></thead><tbody>
+    ${rows.slice().reverse().map(r => `<tr><td>${frDate(r.date)}</td><td>${esc(r.s)}</td><td class="n">${esc(r.c)} kg</td><td class="n">${r.d.filter(Boolean).length}</td></tr>`).join("")}</tbody></table></div>` : ""}`;
+}
+let ro = null;
+function drawChart(){
+  const svg = document.getElementById("chart"); if(!svg) return;
+  const id = document.getElementById("exSel").value;
+  const pts = series(id).map(r => ({date:r.date, v:num(r.c)})).filter(p => p.v !== null);
+  const W = svg.clientWidth, H = svg.clientHeight; if(!W || !pts.length) return;
+  const L = 40, R = 14, T = 16, B = 30;
+  let lo = Math.min(...pts.map(p => p.v)), hi = Math.max(...pts.map(p => p.v));
+  if(lo === hi){ lo -= 5; hi += 5; } const padv = (hi - lo) * .15; lo = Math.max(0, lo - padv); hi += padv;
+  const x = i => pts.length === 1 ? (L + W - R) / 2 : L + i * (W - L - R) / (pts.length - 1);
+  const y = v => T + (hi - v) / (hi - lo) * (H - T - B);
+  const ticks = [lo, (lo+hi)/2, hi];
+  const step = Math.max(1, Math.ceil(pts.length / Math.floor((W - L) / 56)));
+  svg.innerHTML =
+    ticks.map(t => `<line x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}" stroke="#2c3138"/><text x="${L-6}" y="${y(t)+4}" fill="#9aa3ad" font-size="12" text-anchor="end">${Math.round(t)}</text>`).join("") +
+    `<polyline fill="none" stroke="#ff6a2b" stroke-width="3" stroke-linejoin="round" points="${pts.map((p,i) => x(i)+","+y(p.v)).join(" ")}"/>` +
+    pts.map((p,i) => `<circle cx="${x(i)}" cy="${y(p.v)}" r="4.5" fill="#ff6a2b"/>` + (i % step === 0 || i === pts.length-1 ? `<text x="${x(i)}" y="${H-8}" fill="#9aa3ad" font-size="12" text-anchor="middle">${frDate(p.date)}</text>` : "")).join("") +
+    `<text x="${x(pts.length-1)}" y="${y(pts[pts.length-1].v)-10}" fill="#f1f2f3" font-size="13" font-weight="700" text-anchor="${pts.length > 1 ? "end" : "middle"}">${pts[pts.length-1].v} kg</text>`;
+}
+
+/* ---------- Vue sauvegarde ---------- */
+function renderSave(){
+  const last = ls.get("lastExport", null), md = ls.get("mdDate", null);
+  return `<div class="card"><h2 class="cond">Sauvegarder mes données</h2>
+    <p>Tes charges sont stockées uniquement sur ce téléphone. Exporte-les une fois par mois, et envoie le fichier à Claude pour analyser ta progression.${last ? "<br>Dernier export : "+new Date(last).toLocaleDateString("fr-FR") : ""}</p>
+    <div class="stack"><button class="btn acc" type="button" id="expJson">Partager / exporter la sauvegarde</button>
+    <button class="btn" type="button" id="expCsv">Exporter en tableau (CSV)</button></div></div>
+    <div class="card"><h2 class="cond">Restaurer</h2><p>Recharge un fichier de sauvegarde (nouveau téléphone, réinstallation). Les séances sont fusionnées avec celles déjà présentes.</p>
+    <label class="btn" style="display:flex;align-items:center;justify-content:center">Choisir un fichier<input type="file" id="imp" accept=".json,application/json" hidden></label></div>
+    <div class="card"><h2 class="cond">Plan des séances</h2><p>Le plan vient du fichier seances.md, relu à chaque ouverture avec du réseau.${md ? "<br>Dernière mise à jour : "+new Date(md).toLocaleString("fr-FR") : ""}</p>
+    <button class="btn" type="button" id="reload">Recharger le plan maintenant</button></div>`;
+}
+function fileOut(name, text, type){
+  const file = new File([text], name, {type});
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    navigator.share({files:[file], title:name}).catch(() => {});
+  } else {
+    const a = document.createElement("a"); a.href = URL.createObjectURL(file); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  }
+  ls.set("lastExport", new Date().toISOString());
+}
+function toCsv(){
+  const names = new Map(); if(plan) for(const s of plan.sessions) for(const e of allEx(s)) names.set(e.id, e.name);
+  const q = v => '"'+String(v).replace(/"/g,'""')+'"';
+  const out = ["date;seance;id;exercice;charge_kg;series_faites"];
+  for(const k of Object.keys(log).sort()) for(const id in log[k].ex){ const e = log[k].ex[id];
+    out.push([log[k].date, log[k].s, id, names.get(id) || id, e.c, e.d.filter(Boolean).length].map(q).join(";")); }
+  return "﻿" + out.join("\n");
+}
+
+/* ---------- Rendu et navigation ---------- */
+function route(){
+  const h = (location.hash || "#seance").slice(1);
+  view = ["seance","progression","sauvegarde"].includes(h) ? h : "seance";
+  for(const a of document.querySelectorAll("nav a")) a.setAttribute("aria-current", a.dataset.v === view);
+  render();
+}
+function render(){
+  if(!plan) return;
+  const m = document.getElementById("main");
+  renderHeader();
+  m.innerHTML = view === "seance" ? renderSeance() : view === "progression" ? renderProg() : renderSave();
+  if(ro){ ro.disconnect(); ro = null; }
+  const fig = document.getElementById("fig");
+  if(fig){ ro = new ResizeObserver(drawChart); ro.observe(fig); }
+}
+window.addEventListener("hashchange", route);
+
+/* ---------- Chrono de repos ---------- */
+let tid = null, left = 0;
+const T = document.getElementById("timer"), tt = document.getElementById("tt"), tl = document.getElementById("tl");
+function tick(){
+  tt.textContent = fmt(Math.max(left, 0));
+  if(left <= 0){ clearInterval(tid); tid = null; T.classList.add("end"); tl.textContent = "C'est reparti !";
+    try{ navigator.vibrate && navigator.vibrate([250,120,250]); }catch(e){} }
+  left--;
+}
+function startTimer(sec, name){ clearInterval(tid); left = sec; T.classList.remove("end"); T.classList.add("on"); tl.textContent = "Repos · "+name; tick(); tid = setInterval(tick, 1000); }
+document.getElementById("tAdd").addEventListener("click", () => { left += 15; if(!tid){ T.classList.remove("end"); tl.textContent = "Repos"; tick(); tid = setInterval(tick, 1000); } });
+document.getElementById("tStop").addEventListener("click", () => { clearInterval(tid); tid = null; T.classList.remove("on","end"); });
+
+/* ---------- Toast ---------- */
+let toT = null;
+function toast(msg){ const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toT); toT = setTimeout(() => t.classList.remove("on"), 2600); }
+
+/* ---------- Événements ---------- */
+document.getElementById("hdr").addEventListener("click", e => {
+  const b = e.target.closest("[data-s]"); if(b){ cur = b.dataset.s; render(); window.scrollTo(0,0); }
+});
+document.getElementById("main").addEventListener("click", e => {
+  const d = e.target.closest(".dot");
+  if(d){
+    const sec = d.closest(".ex"), id = sec.dataset.id, j = +d.dataset.j;
+    const en = entry(id, true); en.d[j] = !en.d[j]; save();
+    d.setAttribute("aria-pressed", !!en.d[j]);
+    const ex = allEx(plan.sessions.find(x => x.key === cur)).find(x => x.id === id);
+    sec.classList.toggle("done", en.d.filter(Boolean).length >= ex.sets);
+    renderHeader();
+    if(en.d[j] && ex.rest && en.d.filter(Boolean).length < ex.sets) startTimer(ex.rest, ex.name);
+    return;
+  }
+  const r = e.target.closest(".rest");
+  if(r){ startTimer(+r.dataset.r, r.closest(".ex").querySelector("h3").textContent.replace(/^\d+\.\s*/, "")); return; }
+  if(e.target.id === "resetDay"){ delete log[dayKey()]; save(); render(); toast("Séance du jour remise à zéro"); return; }
+  if(e.target.id === "expJson"){ fileOut("seances-sauvegarde-"+today()+".json", JSON.stringify({app:"seances-salle", v:1, exported:new Date().toISOString(), log}, null, 1), "application/json"); return; }
+  if(e.target.id === "expCsv"){ fileOut("seances-charges-"+today()+".csv", toCsv(), "text/csv"); return; }
+  if(e.target.id === "reload"){ loadPlan().then(() => toast("Plan rechargé")); return; }
+});
+document.getElementById("main").addEventListener("input", e => {
+  const i = e.target.closest("input[data-id]");
+  if(i){ entry(i.dataset.id, true).c = i.value.trim(); save(); }
+});
+document.getElementById("main").addEventListener("change", e => {
+  if(e.target.id === "exSel"){ ls.set("progEx", e.target.value); render(); return; }
+  if(e.target.id === "imp" && e.target.files[0]){
+    e.target.files[0].text().then(t => {
+      const data = JSON.parse(t); if(!data.log) throw new Error();
+      for(const k in data.log){ if(!log[k]) log[k] = data.log[k]; else Object.assign(log[k].ex, Object.fromEntries(Object.entries(data.log[k].ex).filter(([id]) => !log[k].ex[id] || log[k].ex[id].c === ""))); }
+      save(); toast(Object.keys(data.log).length+" séance(s) restaurée(s)"); render();
+    }).catch(() => toast("Fichier non reconnu"));
+  }
+});
+
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+loadPlan();
+}
+</script>
+</body>
+</html>
